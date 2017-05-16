@@ -36,23 +36,6 @@ def search_post():
 
 @app.route('/buy', methods=['GET','POST'])
 def buy():
-    if request.method == 'POST':
-        text = request.form['stock']
-        stock = text.upper()
-        quantity = float(request.form['quantity'])
-
-        total_cost = float(Share(str(stock)).get_price())*quantity
-        portfolio = User.get(User.username == session['username']).portfolio
-        buying_power = User.get(User.username == session['username']).money
-
-        if buying_power >= total_cost:
-            if portfolio.get(stock) is None:
-                portfolio[stock] = quantity
-
-                User.get(User.username == session['username']).money = buying_power - total_cost
-                User.get(User.username == session['username']).save()
-            return redirect(url_for('dashboard'))
-
     return render_template('buy.html')
 
 @app.route('/sell')
