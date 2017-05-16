@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <form action="" method="POST">
+    <div class="form-group">
+      <label>Stock Symbol</label>
+      <input type="text" name="stock" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Get Price</button>
+  </form>
+
+  {% if stock_price %}
+    <h1><center>${{stock_price}}</center></h1>
+  {% endif %}
+
+{% endblock %}
