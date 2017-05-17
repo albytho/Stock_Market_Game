@@ -109,8 +109,8 @@ def logout():
 @is_logged_in
 def dashboard():
     user = mongo.db.users
-    buying_power = user.find_one({'name': 'John'})['buying_power']
-    return render_template('dashboard.html',money=buying_power)
+    profile = user.find_one({'name': 'John'})
+    return render_template('dashboard.html',money=profile['buying_power'])
 
 if __name__ == '__main__':
     app.secret_key='secret123'
