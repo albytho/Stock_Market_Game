@@ -11,13 +11,6 @@ app.config['MONGO_DBNAME'] = 'albythoconnect'
 app.config['MONGO_URI'] = 'mongodb://albytho:Brownknight97@ds143151.mlab.com:43151/albythoconnect'
 mongo = PyMongo(app)
 
-@app.before_request
-def before_request():
-    initialize_db()
-
-@app.teardown_request
-def teardown_request(exception):
-    db.close()
 
 @app.route('/')
 def index():
