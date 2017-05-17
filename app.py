@@ -58,7 +58,7 @@ def register():
         username = form.username.data
         password = sha256_crypt.encrypt(str(form.password.data))
 
-        user.insert({'name' : name, 'username' : username, 'email' : email, 'password' : password})
+        user.insert({'name' : name, 'username' : username, 'email' : email, 'password' : password, 'buying_power' : 10000})
         flash('You are now registered and can log in', 'success')
         return redirect(url_for('login'))
     return render_template('register.html',form=form)
@@ -108,8 +108,9 @@ def logout():
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
-    money = User.get(User.username == session['username']).money
-    return render_template('dashboard.html',money=money)
+    user = mongo.db.users
+    buying_power = user.find_one({'name': 'John'})['buying_power']
+    return render_template('dashboard.html',money=buying_power)
 
 if __name__ == '__main__':
     app.secret_key='secret123'
