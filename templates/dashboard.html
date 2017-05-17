@@ -1,9 +1,20 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <h1><small>Welcome {{session.username}}!</small></h1>
   <center>
+      <h1><small>Welcome {{session.username}}!</small></h1>
       <h3>Your current buying power is...</h3>
       <h3><font color="green">${{money}}</font></h3>
   </center>
+
+  {% if portfolio %}
+    <h4><u>Owned Stocks</u></h4>
+  {% endif %}
+
+  {% for stock in portfolio %}
+    <p>{{stock}} : {{portfolio[stock]}}</p>
+  {% endfor %}
+
+
+
 {% endblock %}

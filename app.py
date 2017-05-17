@@ -57,7 +57,7 @@ def buy():
             return redirect(url_for('buy'))
     return render_template('buy.html')
 
-@app.route('/sell')
+@app.route('/sell', methods=['GET','POST'])
 def sell():
     user = mongo.db.users
     if request.method == 'POST':
@@ -73,6 +73,8 @@ def sell():
         if stock in profile['portfolio'] :
             profile['portfolio'][stock] = profile['portfolio'][stock] - quantity
             profile['buying_power'] = profile['buying_power'] + revenue
+            if profile['portfolio'][stock] == 0 :
+                profile['portfolio'].pop(stock, None)
             user.save(profile)
             return redirect(url_for('dashboard'))
         else:
@@ -152,7 +154,7 @@ def logout():
 def dashboard():
     user = mongo.db.users
     profile = user.find_one({'username': session['username']})
-    return render_template('dashboard.html',money=profile['buying_power'])
+    return render_template('dashboard.html',money=profile['buying_power'],portfolio=profile['portfolio'])
 
 if __name__ == '__main__':
     app.secret_key='secret123'
