@@ -109,7 +109,7 @@ def logout():
 @is_logged_in
 def dashboard():
     user = mongo.db.users
-    profile = user.find_one({'name': 'John'})
+    profile = user.find_one({'username': session['username']})
     return render_template('dashboard.html',money=profile['buying_power'])
 
 if __name__ == '__main__':
