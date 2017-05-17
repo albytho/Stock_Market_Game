@@ -72,7 +72,7 @@ def login():
 
         query = user.find_one({'username': username})
 
-        if query.exists():
+        if query is not None:
             password = query['password']
             if sha256_crypt.verify(password_candidate,password):
                 session['logged_in'] = True
