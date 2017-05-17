@@ -1,12 +1,15 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
-from models import *
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
 from yahoo_finance import Share
+from flask_pymongo import PyMongo
 
 app = Flask(__name__)
 
+app.config['MONGO_DBNAME'] = 'albythoconnect'
+app.config['MONGO_URI'] = 'mongodb://albytho:Brownknight97@ds143151.mlab.com:43151/albythoconnect'
+mongo = PyMongo(app)
 
 @app.before_request
 def before_request():
@@ -55,13 +58,14 @@ class RegisterForm(Form):
 @app.route('/register', methods=['GET','POST'])
 def register():
     form = RegisterForm(request.form)
+    user = mongo.db.users
     if request.method == 'POST' and form.validate():
         name = form.name.data
         email = form.email.data
         username = form.username.data
         password = sha256_crypt.encrypt(str(form.password.data))
 
-        User.create(name=name, username=username, email=email, password=password)
+        user.insert({'name' : name, 'username' : username, 'email' : email, 'password' : password})
         flash('You are now registered and can log in', 'success')
         return redirect(url_for('login'))
     return render_template('register.html',form=form)
