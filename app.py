@@ -32,10 +32,52 @@ def search_post():
 
 @app.route('/buy', methods=['GET','POST'])
 def buy():
+    user = mongo.db.users
+    if request.method == 'POST':
+        text = request.form['stock']
+        stock = text.upper()
+
+        quantity = float(request.form['quantity'])
+        stock_price = float(Share(str(stock)).get_price())
+
+        total_cost = quantity*stock_price
+
+        profile = user.find_one({'username': session['username']})
+        if profile['buying_power'] >= total_cost :
+            if stock in profile['portfolio'] :
+                profile['portfolio'][stock] = profile['portfolio'][stock] + quantity
+            else:
+                profile['portfolio'][stock] = quantity
+
+            profile['buying_power'] = profile['buying_power'] - total_cost
+            user.save(profile)
+            return redirect(url_for('dashboard'))
+        else:
+            flash('You do not have enough funds', 'danger')
+            return redirect(url_for('buy'))
     return render_template('buy.html')
 
 @app.route('/sell')
 def sell():
+    user = mongo.db.users
+    if request.method == 'POST':
+        text = request.form['stock']
+        stock = text.upper()
+
+        quantity = float(request.form['quantity'])
+        stock_price = float(Share(str(stock)).get_price())
+
+        revenue = quantity*stock_price
+
+        profile = user.find_one({'username': session['username']})
+        if stock in profile['portfolio'] :
+            profile['portfolio'][stock] = profile['portfolio'][stock] - quantity
+            profile['buying_power'] = profile['buying_power'] + revenue
+            user.save(profile)
+            return redirect(url_for('dashboard'))
+        else:
+            flash('You do not own this stock', 'danger')
+            return redirect(url_for('sell'))
     return render_template('sell.html')
 
 class RegisterForm(Form):
@@ -58,7 +100,7 @@ def register():
         username = form.username.data
         password = sha256_crypt.encrypt(str(form.password.data))
 
-        user.insert({'name' : name, 'username' : username, 'email' : email, 'password' : password, 'buying_power' : 10000})
+        user.insert({'name' : name, 'username' : username, 'email' : email, 'password' : password, 'buying_power' : 10000, 'portfolio' : {}})
         flash('You are now registered and can log in', 'success')
         return redirect(url_for('login'))
     return render_template('register.html',form=form)
