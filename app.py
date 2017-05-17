@@ -65,14 +65,15 @@ def register():
 
 @app.route('/login', methods=['GET','POST'])
 def login():
+    user = mongo.db.users
     if request.method == 'POST':
         username = request.form['username']
         password_candidate = request.form['password']
 
-        query = User.select().where(User.username == username)
+        query = user.find_one({'username': username})
 
         if query.exists():
-            password = User.get(User.username == username).password
+            password = query['password']
             if sha256_crypt.verify(password_candidate,password):
                 session['logged_in'] = True
                 session['username'] = username
@@ -82,8 +83,6 @@ def login():
             else:
                 error = "Invalid login"
                 return render_template('login.html',error=error)
-
-            db.close()
         else:
             error = "Username not found"
             return render_template('login.html',error=error)
