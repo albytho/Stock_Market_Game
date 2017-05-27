@@ -158,4 +158,4 @@ def dashboard():
 
 if __name__ == '__main__':
     app.secret_key='secret123'
-    app.run(threaded=True)
+    app.run(threaded=True, debug=True)
