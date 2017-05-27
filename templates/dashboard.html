@@ -7,14 +7,22 @@
       <h3><font color="green">${{money}}</font></h3>
   </center>
 
-  {% if portfolio %}
-    <h4><u>Owned Stocks</u></h4>
-  {% endif %}
-
-  {% for stock in portfolio %}
-    <p>{{stock}} : {{portfolio[stock]}}</p>
-  {% endfor %}
-
+<table class="table">
+  <thead>
+    <tr>
+      <th>Owned Stock</th>
+      <th>Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for stock in portfolio %}
+      <tr>
+        <td>{{stock}}</td>
+        <td>{{portfolio[stock]}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 
 {% endblock %}
