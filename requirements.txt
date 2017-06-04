@@ -7,3 +7,8 @@ Flask-WTF==0.14.2
 passlib==1.7.1
 pathlib2==2.2.0
 yahoo-finance==1.4.0
+gunicorn==19.7.1
+Jinja2==2.9.4
+MarkupSafe==0.23
+Werkzeug==0.11.15
+requests==2.12.4
