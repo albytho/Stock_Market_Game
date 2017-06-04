@@ -1,0 +1,9 @@
+Flask==0.12
+Flask-Cors==3.0.2
+Flask-MongoAlchemy==0.7.2
+Flask-PyMongo==0.4.1
+Flask-SQLAlchemy==2.2
+Flask-WTF==0.14.2
+passlib==1.7.1
+pathlib2==2.2.0
+yahoo-finance==1.4.0
